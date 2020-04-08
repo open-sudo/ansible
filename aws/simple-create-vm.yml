@@ -13,7 +13,7 @@
          instance_type: t2.micro
          image: "{{ ami_id }}"
          wait: true
-         exact_count: 1
+         exact_count: 2
          count_tag:
             Name: CICD
          instance_tags:
