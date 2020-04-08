@@ -23,5 +23,6 @@
     - name: allocate a new elastic IP inside a VPC in us-west-2
       ec2_eip:
           device_id: "{{ item }}"
+          region: "{{ aws_region }}"
       loop: "{{ ec2.instance_ids }}"
       register: eip
