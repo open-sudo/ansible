@@ -2,7 +2,7 @@
 - name: Play to create EC2 resources and finally a RHEL8 instance.
   hosts: localhost
   vars:
-    aws_region: us-east-1
+    aws_region: ap-southeast-1
   tasks:
     - name: Task to create the VPC
       ec2_vpc_net:
@@ -14,6 +14,7 @@
 
     - name: Create an Internet Gateway and associate to the VPC
       ec2_vpc_igw:
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
         region: "{{ aws_region }}"
         state: present
       register: ansible_tower_igw
@@ -21,12 +22,14 @@
     - name: Create a subnet in the VPC
       ec2_vpc_subnet:
         state: present
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
         cidr: 10.10.0.0/20
         region: "{{ aws_region }}"
       register: ansible_tower_subnet
 
     - name: Set up public subnet route table
       ec2_vpc_route_table:
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
         region: "{{ aws_region }}"
         subnets:
            - "{{ ansible_tower_subnet.subnet.id }}"
@@ -38,6 +41,7 @@
       ec2_group:
         name: ansible_tower_sg
         description: AWS Security Group for Ansible Tower Demonstration
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
         region: "{{ aws_region }}"
         rules:
           - proto: tcp
@@ -62,4 +66,3 @@
     - name: Show RHEL8 instance details - debug output
       debug:
         msg: "The RHEL8 instance is accessible at {{ ansible_tower_instance.instances[0].public_ip }}"
-...
