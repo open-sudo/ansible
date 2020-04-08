@@ -19,10 +19,9 @@
          instance_tags:
             Name: CICD
       register: ec2
-      wantlist: true
 
     - name: allocate a new elastic IP inside a VPC in us-west-2
       ec2_eip:
           device_id: "{{ item }}"
-      loop: "{{ ec2.instance_ids }}"
+      loop: "{{ ec2.instance_ids, wantlist=True }}"
       register: eip
