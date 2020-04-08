@@ -21,9 +21,9 @@
             Name: CICD
       register: ec2
    
-   - name: Wait for SSH
-     delegate_to: "{{ item.public_dns_name }}"
-     wait_for_connection:
-         delay: 60
-         timeout: 320
-     loop: "{{ ec2.instances }}"
+    - name: Wait for SSH
+      delegate_to: "{{ item.public_dns_name }}"
+      wait_for_connection:
+          delay: 60
+          timeout: 320
+      loop: "{{ ec2.instances }}"
