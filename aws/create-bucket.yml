@@ -11,8 +11,9 @@
           name: "{{ bucket_name }}"
           state: present
           region: us-east-1
-     - name: Delete Bucket
-       s3_bucket: 
+          
+      - name: Delete Bucket
+        s3_bucket: 
           name: "{{ bucket_name }}"
           state: absent
           force: yes
