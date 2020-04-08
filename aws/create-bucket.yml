@@ -5,7 +5,7 @@
 
     tasks:
       - name: Create new bucket
-        aws_s3:
-          bucket: testme817275b
-          mode: create
+        s3_bucket:
+          name: testme817275b
+          state: present
           region: us-east-1
