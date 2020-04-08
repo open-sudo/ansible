@@ -13,12 +13,13 @@
          instance_type: t2.micro
          image: "{{ ami_id }}"
          wait: true
-         exact_count: 2
+         exact_count: 1
          count_tag:
             Name: CICD
          instance_tags:
             Name: CICD
       register: ec2
+      wantlist: true
 
     - name: allocate a new elastic IP inside a VPC in us-west-2
       ec2_eip:
