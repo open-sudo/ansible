@@ -8,7 +8,7 @@
 
     - name: Provision a set of instances
       ec2:
-         key_name: my_key
+         key_name: rwedhat-aws-keypair
          region: "{{ aws_region }}"
          instance_type: t2.micro
          image: "{{ ami_id }}"
