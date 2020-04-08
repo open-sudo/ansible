@@ -14,8 +14,15 @@
          image: "{{ ami_id }}"
          wait: true
          exact_count: 1
+         assign_public_ip: yes
          count_tag:
-            Name: Demo
+            Name: CICD
          instance_tags:
-            Name: Demo
+            Name: CICD
       register: ec2
+   - name: Wait for SSH
+     delegate_to: "{{ item.public_dns_name }}"
+     wait_for_connection:
+        delay: 60
+        timeout: 30
+     loop: "{{ ec2.instances }}"
