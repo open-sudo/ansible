@@ -19,10 +19,8 @@
          instance_tags:
             Name: CICD
       register: ec2
-   
-    - name: Wait for SSH
-      delegate_to: "{{ item.public_dns_name }}"
-      wait_for_connection:
-          delay: 60
-          timeout: 320
-      loop: "{{ ec2.instances }}"
+
+    - name: allocate a new elastic IP inside a VPC in us-west-2
+      ec2_eip:
+          region: "{{ aws_region}}"
+      register: eip
