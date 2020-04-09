@@ -39,15 +39,18 @@
           device_id: "{{ item }}"
       loop: "{{ ec2.instance_ids }}"
       register: eip
-      
+    - name: output the IP
+      debug:
+        msg: "Allocated IP inside a VPC is {{ eip }}"
+   
     - name: Wait for SSH to come up
       delegate_to: "{{ item.public_dns_name }}"
       wait_for_connection:
         delay: 60
         timeout: 320
-      loop: "{{ ec2.instances }}"
+      loop: "{{ eip.public_ip }}"
 
     - name: ping each machine
       ping:
-      loop: "{{ ec2.instances }}"
+      loop: "{{  eip.public_ip }}"
       register: eip
