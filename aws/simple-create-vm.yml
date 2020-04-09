@@ -3,8 +3,20 @@
   vars:
      ami_id: "ami-0affd4508a5d2481b"
      aws_region: "us-east-1"
+     security_group: "ansible_tower_sg"
 
   tasks:
+   - name: Task to create AWS Security Groups
+      ec2_group:
+        name: "{{ security_group }}"
+        description: AWS Security Group for Ansible Tower Demonstration
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all connections on port 22
 
     - name: Provision a set of instances
       ec2:
@@ -13,6 +25,7 @@
          instance_type: t2.micro
          image: "{{ ami_id }}"
          wait: true
+         security_group: "{{ security_group }}"
          count: 1
          count_tag:
             Name: CICD
@@ -26,7 +39,15 @@
           device_id: "{{ item }}"
       loop: "{{ ec2.instance_ids }}"
       register: eip
+      
+    - name: Wait for SSH to come up
+      delegate_to: "{{ item.public_dns_name }}"
+      wait_for_connection:
+        delay: 60
+        timeout: 320
+      loop: "{{ ec2.instances }}"
+
     - name: ping each machine
       ping:
-      loop: "{{ ec2.instance_ids }}"
+      loop: "{{ ec2.instances }}"
       register: eip
