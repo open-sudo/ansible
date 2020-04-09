@@ -49,8 +49,8 @@
       wait_for_connection:
         delay: 60
         timeout: 320
-      loop: "{{ eip }}"
+      loop: "{{ eip.results }}"
 
     - name: ping each machine
       ping:
-      loop: "{{  eip }}"
+      loop: "{{  eip.results }}"
