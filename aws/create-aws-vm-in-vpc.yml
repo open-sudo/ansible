@@ -68,7 +68,7 @@
     - name: Show RHEL8 instance details - debug output
       debug:
         msg: "The RHEL8 instance is accessible at {{ ansible_tower_instance.instances[0].public_ip }}"
- 
+     
     - name: Wait for SSH to come up
       delegate_to: "{{ ansible_tower_instance.instances[0].public_ip }}"
       wait_for_connection:
