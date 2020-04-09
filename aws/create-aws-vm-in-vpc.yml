@@ -1,0 +1,71 @@
+---
+- name: Play to create EC2 resources and finally a RHEL8 instance.
+  hosts: localhost
+  vars:
+    aws_region: us-east-1
+    aws_keypair: "{{ ansible_redhat_keypair}}"
+    ami_id: "ami-0affd4508a5d2481b"
+
+  tasks:
+    - name: Task to create the VPC
+      ec2_vpc_net:
+        name: ansible_tower_vpc
+        cidr_block: 10.10.0.0/16
+        region: "{{ aws_region }}"
+        tenancy: default
+      register: ansible_tower_vpc
+
+    - name: Create an Internet Gateway and associate to the VPC
+      ec2_vpc_igw:
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
+        region: "{{ aws_region }}"
+        state: present
+      register: ansible_tower_igw
+
+    - name: Create a subnet in the VPC
+      ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
+        cidr: 10.10.0.0/20
+        region: "{{ aws_region }}"
+      register: ansible_tower_subnet
+
+    - name: Set up public subnet route table
+      ec2_vpc_route_table:
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
+        region: "{{ aws_region }}"
+        subnets:
+           - "{{ ansible_tower_subnet.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ ansible_tower_igw.gateway_id }}"
+
+    - name: Task to create AWS Security Groups
+      ec2_group:
+        name: ansible_tower_sg
+        description: AWS Security Group for Ansible Tower Demonstration
+        vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
+        region: "{{ aws_region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all connections on port 22
+
+    - name: Task to provision the RHEL8 EC2 instance
+      ec2:
+        region: "{{ aws_region }}"
+        key_name: "{{ aws_keypair}}"
+        instance_type: t2.medium
+        image: "{{ ami_id }}"
+        wait: yes
+        group: ansible_tower_sg
+        count: 1
+        vpc_subnet_id: "{{ ansible_tower_subnet.subnet.id }}"
+        assign_public_ip: yes
+      register: ansible_tower_instance
+
+    - name: Show RHEL8 instance details - debug output
+      debug:
+        msg: "The RHEL8 instance is accessible at {{ ansible_tower_instance.instances[0].public_ip }}"
