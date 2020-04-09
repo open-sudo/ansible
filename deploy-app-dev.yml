@@ -1,9 +1,12 @@
 ---                                                                                                                                                                                                         
 # This playbook adds a user, and expects to be passed a username variable on the ansible-playbook command line
-- hosts: web
+- hosts: all
   become_user: root
   become_method: sudo
   become: yes  
+  plugin: aws_ec2
+  regions:
+       - us-east-1
 
   tasks:
     - name: Install web server
