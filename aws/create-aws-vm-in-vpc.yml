@@ -3,7 +3,7 @@
   hosts: localhost
   vars:
     aws_region: us-east-1
-    aws_keypair: "{{ ansible_redhat_keypair}}"
+    aws_keypair: "ansible_redhat_keypair"
     ami_id: "ami-0affd4508a5d2481b"
 
   tasks:
@@ -56,7 +56,7 @@
     - name: Task to provision the RHEL8 EC2 instance
       ec2:
         region: "{{ aws_region }}"
-        key_name: "{{ aws_keypair}}"
+        key_name: "{{ aws_keypair }}"
         instance_type: t2.medium
         image: "{{ ami_id }}"
         wait: yes
