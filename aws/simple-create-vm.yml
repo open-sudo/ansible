@@ -6,8 +6,8 @@
      security_group: "ansible_tower_sg"
 
   tasks:
-   - name: Task to create AWS Security Groups
-     ec2_group:
+    - name: Task to create AWS Security Groups
+      ec2_group:
         name: "{{ security_group }}"
         description: AWS Security Group for Ansible Tower Demonstration
         region: "{{ aws_region }}"
@@ -17,7 +17,7 @@
               - 22
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all connections on port 22
-
+            
     - name: Provision a set of instances
       ec2:
          key_name: ansible-redhat-keypair
