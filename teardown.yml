@@ -6,7 +6,8 @@
 
   tasks:  
   - debug:
-    msg: "Host vars: {{hostvars}}"
+       msg: 
+         - "Host vars: {{hostvars}}"
   - name: Terminate aws instance
     local_action:
         module: ec2
