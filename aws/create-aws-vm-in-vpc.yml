@@ -80,3 +80,7 @@
     - name: ping each machine
       delegate_to: "{{ ansible_tower_instance.instances[0].public_ip }}"    
       ping:
+    
+    - pause:
+         prompt: "Continue to deploy webapp?"
+         echo: yes
