@@ -14,4 +14,9 @@
         instance_ids: "{{ hostvars[groups['all'][0]]['instance_id'] }}"
         wait: True
   - name: Wait for the instances to be stopped by checking the ssh port
-       wait_for: host="{{ hostvars[groups['all'][0]]['inventory_hostname'] }}" port=22 delay=60 timeout=320 state=stopped
+    wait_for: 
+       host: "{{ hostvars[groups['all'][0]]['inventory_hostname'] }}" 
+       port: 22
+       delay: 60
+       timeout: 320
+       state: stopped
