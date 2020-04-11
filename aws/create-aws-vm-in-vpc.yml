@@ -45,9 +45,6 @@
         description: AWS Security Group for Ansible Tower Demonstration
         vpc_id: "{{ ansible_tower_vpc.vpc.id }}"
         region: "{{ aws_region }}"
-        volumes:
-            - device_name: /dev/sdb
-              delete_on_termination: true
         rules:
           - proto: tcp
             ports:
