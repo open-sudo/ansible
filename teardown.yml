@@ -4,10 +4,7 @@
      aws_region: "us-east-1"
      security_group: "ansible_tower_sg"
 
-  tasks:  
-  - debug:
-       msg: 
-         - "Host vars: {{ ec2 }}"
+  tasks: 
   - name: Terminate aws instance
     local_action:
         module: ec2
