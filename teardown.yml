@@ -7,18 +7,12 @@
   tasks:  
   - debug:
        msg: 
-         - "Host vars: {{hostvars}}"
+         - "Host vars: {{ ec2 }}"
   - name: Terminate aws instance
     local_action:
         module: ec2
         region: "{{ aws_region }}"
         state: 'absent'
-        instance_ids: "{{ hostvars[groups['all'][0]]['ec2_id'] }}"
+        instance_ids: "{{ ec2.instance_ids }}"
         wait: True
-  - name: Wait for the instances to be stopped by checking the ssh port
-    wait_for: 
-       host: "{{ hostvars[groups['all'][0]]['ec2_ip_address'] }}" 
-       port: 22
-       delay: 60
-       timeout: 320
-       state: stopped
+
