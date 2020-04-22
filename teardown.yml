@@ -1,15 +1,17 @@
-- hosts: localhost
-  gather_facts: False
+---
+- name: gather facts
+  hosts: all
+  gather_facts: true 
   vars:
-     aws_region: "us-east-1"
-     security_group: "ansible_tower_sg"
-
-  tasks: 
-  - name: Terminate aws instance
-    local_action:
-        module: ec2
-        region: "{{ aws_region }}"
-        state: 'absent'
-        instance_ids: "{{ ec2.instance_ids }}"
-        wait: True
-
+    ec2_region: us-east-1
+- name: terminate hosts
+  hosts: all
+  connection: local  
+  tasks:
+  - name: terminate EC2 hosts
+    ec2: >
+      region="{{ ec2_region }}"
+      instance_ids="{{ item }}"
+      state=absent
+      wait=True
+    with_items: hostvars[inventory_hostname]['ansible_ec2_instance_id'] 
