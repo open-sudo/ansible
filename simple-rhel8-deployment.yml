@@ -1,0 +1,71 @@
+---
+- name: Playbook to provision Azure resources and finally a RHEL8 instance
+  hosts: localhost
+  tasks:
+    - name: Create the resource group
+      azure_rm_resourcegroup:
+        name: ansible-rhel-rg
+        location: eastus
+
+    - name: Create the virtual network
+      azure_rm_virtualnetwork:
+        name: ansible-rhel-vnet
+        resource_group: ansible-rhel-rg
+        address_prefixes_cidr:
+            - "10.1.0.0/16"
+
+    - name: Create the virtual subnet
+      azure_rm_subnet:
+        name: ansible-rhel-subnet
+        resource_group: ansible-rhel-rg
+        virtual_network_name: ansible-rhel-vnet
+        address_prefix_cidr: "10.1.0.0/24"
+
+    - name: Create public IP address
+      azure_rm_publicipaddress:
+        name: ansible-rhel-ip
+        resource_group: ansible-rhel-rg
+        allocation_method: Static
+      register: ansible_rhel_ip
+
+    - name: Create the security group to allow SSH connection
+      azure_rm_securitygroup:
+        name: ansible-rhel-sg
+        resource_group: ansible-rhel-rg
+        purge_rules: yes
+        rules:
+          - name: 'AllowSSH'
+            protocol: Tcp
+            source_address_prefix:
+              - '0.0.0.0/0'
+            destination_port_range: 22
+            access: Allow
+            priority: 100
+            direction: Inbound
+
+    - name: Create the virtual network interface card
+      azure_rm_networkinterface:
+        name: ansible-rhel-nic
+        resource_group: ansible-rhel-rg
+        virtual_network: ansible-rhel-vnet
+        subnet: ansible-rhel-subnet
+        public_ip_name: ansible-rhel-ip
+        security_group: ansible-rhel-sg
+
+    - name: Create the Virtual Machine
+      azure_rm_virtualmachine:
+        name: RHEL8
+        resource_group: ansible-rhel-rg
+        admin_username: sreejith
+        admin_password: YourVeryStrongPassword
+        vm_size: Standard_A1_v2
+        network_interfaces: ansible-rhel-nic
+        image:
+          offer: "RHEL"
+          publisher: "RedHat"
+          sku: "8"
+          version: "latest"
+
+    - name: Show RHEL8 instance Public IP
+      debug:
+        msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }}"
