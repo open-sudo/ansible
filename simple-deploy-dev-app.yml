@@ -1,0 +1,46 @@
+---                                                                                                                                                                                                         
+# This playbook adds a user, and expects to be passed a username variable on the ansible-playbook command line
+- hosts: all
+  become_user: root
+  become_method: sudo
+  become: yes  
+  ansible_sudo_pass: SolidBambou75Rimouski>/
+  
+
+  tasks:
+    - name: Install web server
+      yum: 
+         state: present 
+         name: 
+           - httpd
+           - git
+           - firewalld
+           
+      tags: software
+    
+
+    - name: Deploy web application
+      git:
+        repo: 'https://github.com/aludwar/webapp.git'
+        dest: /var/www/html/webapp
+        #version: release-0.22
+    
+    - name: Start/enable web server and firewalld
+      systemd:
+       name: "{{ item }}"
+       state: started
+       enabled: yes
+      with_items:
+       - 'httpd'
+       - 'firewalld'
+      tags: software
+
+    - name: Set firewall rules to allow http/https
+      firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: yes
+      with_items:
+        - https
+        - http
