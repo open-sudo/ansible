@@ -4,7 +4,7 @@
   become_user: root
   become_method: sudo
   become: yes  
-  ansible_sudo_pass: SolidBambou75Rimouski>/
+  ansible_become_password: SolidBambou75Rimouski>/
   
 
   tasks:
