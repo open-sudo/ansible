@@ -22,7 +22,7 @@
 
     - name: Deploy web application
       git:
-        repo: 'https://github.com/aludwar/webapp.git'
+        repo: 'https://github.com/open-sudo/empty-webapp.git'
         dest: /var/www/html/webapp
         #version: release-0.22
     
