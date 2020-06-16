@@ -1,8 +1,13 @@
 ---
 # This playbook updates all RHEL hosts
 - hosts: all
-  vars: 
-
+  become_user: root
+  become_method: sudo
+  become: yes  
+  
+  vars:
+     ansible_become_password: SolidBambou75Rimouski>/
+  
   tasks:
     - name: Ensure the latest patches and errata are applied to linux clients
       yum:
