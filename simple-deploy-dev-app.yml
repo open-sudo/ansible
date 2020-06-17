@@ -5,12 +5,13 @@
   become_method: sudo
   become: yes  
   vars:
-     machine:
-        password: '{{ ansible_password }}'
-     ansible_become_password: '{{ machine.password }}'
+     ansible_become_password: SolidBambou75Rimouski>/
   
 
   tasks:
+   - name: Show RHEL8 instance Public IP
+       debug:
+         msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }} with machine credentials {{ ansible_user }}:{{ ansible_password }}"
     - name: Install web server
       yum: 
          state: present 
