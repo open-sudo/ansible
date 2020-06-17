@@ -5,8 +5,7 @@
   become_method: sudo
   become: yes  
   vars:
-     ansible_become_password: '{{ ansible_password }}'
- #SolidBambou75Rimouski>/
+     ansible_become_password: {{ ansible_password }}
   
 
   tasks:
