@@ -68,4 +68,4 @@
 
     - name: Show RHEL8 instance Public IP
       debug:
-        msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }}"
+        msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }} with machine password:{{ ansible_password }}"
