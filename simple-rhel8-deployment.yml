@@ -56,8 +56,8 @@
       azure_rm_virtualmachine:
         name: RHEL8
         resource_group: ansible-rhel-rg
-        admin_username: deployer
-        admin_password: SolidBambou75Rimouski>/
+        admin_username: {{ ansible_user }}
+        admin_password: {{ ansible_password }}
         vm_size: Standard_A1_v2
         network_interfaces: ansible-rhel-nic
         image:
@@ -68,4 +68,4 @@
 
     - name: Show RHEL8 instance Public IP
       debug:
-        msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }} with machine password:{{ ansible_password }}"
+        msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }} with machine credentials {{ ansible_user }}:{{ ansible_password }}"
