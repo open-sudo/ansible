@@ -9,9 +9,10 @@
   
 
   tasks:
-   - name: Show RHEL8 instance Public IP
-     debug:
+    - name: Show RHEL8 instance Public IP
+      debug:
          msg: "The RHEL8 instance is accessible at {{ ansible_rhel_ip.state.ip_address }} with machine credentials {{ ansible_user }}:{{ ansible_password }}"
+         
     - name: Install web server
       yum: 
          state: present 
