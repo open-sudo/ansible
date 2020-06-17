@@ -56,7 +56,7 @@
       azure_rm_virtualmachine:
         name: RHEL8
         resource_group: ansible-rhel-rg
-        admin_username: '{{ ansible_user }}'
+        admin_username: '{{ ansible_username }}'
         admin_password: '{{ ansible_password }}'
         vm_size: Standard_A1_v2
         network_interfaces: ansible-rhel-nic
