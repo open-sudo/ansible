@@ -5,7 +5,9 @@
   become_method: sudo
   become: yes  
   vars:
-     ansible_become_password: {{ ansible_password }}
+     machine:
+        password: '{{ ansible_password }}'
+     ansible_become_password: '{{ password }}'
   
 
   tasks:
