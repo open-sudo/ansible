@@ -3,9 +3,10 @@
 - hosts: all
   become_user: root
   become_method: sudo
-  become: yes  
+  become: yes
   ansible_become_password: "{{ ansible_password }}"
-
+  
+  
   tasks:        
     - name: Install web server
       yum: 
