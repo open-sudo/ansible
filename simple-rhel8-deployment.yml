@@ -57,7 +57,7 @@
         name: RHEL8
         resource_group: ansible-rhel-rg
         admin_username: deployer
-        admin_password: 'SolidBambou75Rimouski>/'
+        admin_password: '{{ ansible_password }}'
         vm_size: Standard_A1_v2
         network_interfaces: ansible-rhel-nic
         image:
