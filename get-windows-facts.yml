@@ -1,0 +1,9 @@
+---
+- name: install the iis web service
+  hosts: windows
+  gather_facts: true
+
+  tasks:
+  - setup:
+    register: ansible_facts
+  - debug: var=ansible_facts
