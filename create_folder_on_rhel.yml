@@ -1,0 +1,10 @@
+---
+- name: install the iis web service
+  hosts: windows
+
+  tasks:
+    - name: create folder
+      file: 
+         path: "{{ destination_path }}"
+         state: directory
+  
